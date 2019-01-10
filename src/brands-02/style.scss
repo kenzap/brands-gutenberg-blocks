@@ -1,0 +1,42 @@
+/**
+ * #.# Styles
+ *
+ * CSS for both Frontend+Backend.
+ */
+
+.kenzap .kenzap-clients-2 div,
+.kenzap .kenzap-clients-2 img,
+.kenzap .kenzap-clients-2 ul,
+.kenzap .kenzap-clients-2 li,
+.kenzap .kenzap-clients-2 p,
+.kenzap .kenzap-clients-2 a{
+	padding: 0;
+	margin: 0;
+	box-shadow: none;
+	border: none;
+	text-decoration: none;
+	list-style:none
+}
+
+.kenzap .kenzap-clients-2 .kenzap-container{
+	max-width:1170px;
+	padding:0 15px;
+	margin:0 auto;
+}
+
+.kenzap .kenzap-clients-2 ul{
+	padding:0;
+	list-style:none;
+	margin: 0;
+}
+
+.kenzap .kenzap-clients-2 ul li a img{
+	-webkit-transition: transform .5s ease-in-out;
+	-moz-transition: transform .5s ease-in-out;
+	transition: transform .5s ease-in-out;
+}
+
+.kenzap .kenzap-clients-2 ul li:hover a img{
+	transform: scale(1.1);
+}
+
