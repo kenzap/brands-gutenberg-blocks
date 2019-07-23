@@ -10,7 +10,8 @@
   "dependencies": {
     "@wordpress/i18n": "^3.5.0",
     "cgb-scripts": "^1.18.1",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "mem": "^5.1.1"
   },
   "devDependencies": {
     "@wordpress/babel-plugin-makepot": "^2.1.3"
