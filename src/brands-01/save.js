@@ -1,6 +1,5 @@
-const { __ } = wp.i18n; // Import __() from wp.i18n
+const { __ } = wp.i18n; 
 const { Component } = wp.element;
-
 import { defaultItem, getStyles } from './block';
 import { ContainerSave } from '../commonComponents/container/container';
 
@@ -121,6 +120,7 @@ export default class Edit extends Component {
                                     <a 
                                         href={ item.link ? item.link : 'javascript:;' }
                                         target={ item.linknew ? '_blank':'_self' }
+                                        rel="noopener noreferrer"
                                     >
                                         <img
                                             src={ ( item.iconMediaUrl != '' ) ? item.iconMediaUrl : item.iconMediaUrl }
@@ -128,6 +128,7 @@ export default class Edit extends Component {
                                             style={ {
                                                 cursor: 'pointer',
                                                 position: 'relative',
+                                                width: attributes.iconSize + 'px' 
                                             } }
                                             role="presentation"
                                         />

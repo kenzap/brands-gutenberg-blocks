@@ -1,8 +1,7 @@
-const { __ } = wp.i18n; // Import __() from wp.i18n
+const { __ } = wp.i18n; 
 const { Component } = wp.element;
-const { MediaUpload, RichText, InspectorControls, PanelColorSettings } = wp.editor;
+const { MediaUpload, InspectorControls } = wp.editor;
 const { RangeControl, PanelBody, Popover, TextControl, ToggleControl } = wp.components;
-
 import { defaultItem, getStyles } from './block';
 import { InspectorContainer, ContainerEdit } from '../commonComponents/container/container';
 
@@ -76,16 +75,6 @@ export default class Edit extends Component {
     };
 
     /**
-     * Set active sub block to edit icon
-     * @param {number} index from sub block array
-     */
-    setActiveSubBlock = ( index ) => {
-        if ( this.state.activeSubBlock !== index ) {
-            this.setState( { activeSubBlock: index } );
-        }
-    };
-
-    /**
      * Remove item
      * It also add default item if we remove all elements from array
      * @param {number} index - of item
@@ -141,6 +130,18 @@ export default class Edit extends Component {
         return (
             <div>
                 <InspectorControls>
+                    <PanelBody
+                            title={ __( 'General', 'kenzap-pricing' ) }
+                            initialOpen={ false }
+                        >
+                        <RangeControl
+                            label={ __( 'Image size', 'kenzap-pricing' ) }
+                            value={ attributes.iconSize }
+                            onChange={ ( iconSize ) => setAttributes( { iconSize } ) }
+                            min={ 50 }
+                            max={ 250 }
+                        />
+                    </PanelBody>
                     <InspectorContainer
                         setAttributes={ setAttributes }
                         { ...attributes }
@@ -165,11 +166,11 @@ export default class Edit extends Component {
                             { attributes.items && attributes.items.map( ( item, index ) => (
                                 <li>
                                     <button className="remove" onClick={ () => this.removeItem( index ) }>
-                                        <span className="dashicons dashicons-no" />
+                                        <i className="dashicons dashicons-no" />
                                     </button>
                                     <a>
                                         <button className="link" onClick={ () => this.addLink( index ) }>
-                                            <span className="dashicons dashicons-admin-links" />
+                                            <i className="dashicons dashicons-admin-links" />
                                         </button>
                                         { item.ilv && (
                                             <Popover
@@ -215,7 +216,7 @@ export default class Edit extends Component {
                                                 this.onChangePropertyItem( 'title', media.title, index, true );
                                             } }
                                             value={ item.iconMediaId }
-                                            allowedTypes={ [ 'image', 'image/svg+xml' ] }
+                                            allowedTypes={ [ 'image', 'image/svg' ] }
                                             render={ ( props ) => (
                                                 <img
                                                     src={ ( item.iconMediaUrl != '' ) ? item.iconMediaUrl : item.iconMediaUrl }
@@ -223,6 +224,7 @@ export default class Edit extends Component {
                                                     style={ {
                                                         cursor: 'pointer',
                                                         position: 'relative',
+                                                        width: attributes.iconSize + 'px' 
                                                     } }
                                                     onClick={ props.open }
                                                     role="presentation"

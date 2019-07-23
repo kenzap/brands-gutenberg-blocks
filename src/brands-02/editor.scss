@@ -1,15 +1,5 @@
-/**
- * #.# Editor Styles
- *
- * CSS for just Backend enqueued after style.scss
- * which makes it higher in priority.
-  .kenzap .link-close,
- */
-
-
-
-.kenzap .link,
-.kenzap .remove {
+.kenzap .kenzap-clients-2 .link,
+.kenzap .kenzap-clients-2 .remove {
 	opacity: 0;
 	position: absolute;
 	top: 10px;
@@ -35,38 +25,43 @@
 	&:focus {
 	  outline: none;
 	}
-  }
+}
 
- .kenzap .link-close{
+.kenzap .kenzap-clients-2 .link-close{
 	margin-top: 5px;
 	opacity: 1;
 	position: relative;
-  }
+}
 
- .kenzap .link{
+.kenzap .kenzap-clients-2 .link{
 	left: 10px;
 	right: auto;
-  }
+}
 
- .kenzap li{
+.kenzap .kenzap-clients-2 ul{
+	display: inline-flex;
+}
+
+.kenzap .kenzap-clients-2 li{
 	  position: relative;
-  }
+}
 
- .kenzap .link-popover > div{
+.kenzap .kenzap-clients-2 .link-popover > div{
 	padding:10px 15px;
-  }
+}
 
- .kenzap .link-text,
- .kenzap .link-close{
+.kenzap .kenzap-clients-2 .link-text,
+.kenzap .kenzap-clients-2 .link-close{
 	display: block;
-  }
+}
 
- .kenzap li:hover .link,
- .kenzap li:hover .remove{
+.kenzap .kenzap-clients-2 li:hover .link,
+.kenzap .kenzap-clients-2 li:hover .remove{
 	opacity: 1;
-  }
+}
   
- .kenzap .addWhite {
+.kenzap .kenzap-clients-2 .addWhite {
+	opacity: 0;
 	position: absolute;
 	display: none;
 	bottom: 20px;
@@ -96,21 +91,22 @@
 	&:focus {
 	  outline: none;
 	}
-  }
+}
   
- .kenzap {
+.kenzap {
 	position: relative;
 	transition: all .2s;
-  }
+}
   
- .kenzap .editPadding {
+.kenzap .editPadding {
 	transition: all .2s;
-  }
+}
   
 .kenzap-clients-2.selected {
   
 	& .addWhite {
-	  display: flex;
+		display: flex;
+		opacity: 1;
 	}
   
 	 .editPadding {
@@ -133,9 +129,9 @@
   -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
 
-.kenzap .kenzap-clients-2 img{
-	min-width: 180px;
-}
+// .kenzap .kenzap-clients-2 img{
+// 	min-width: 180px;
+// }
 
 .kenzap .kenzap-clients-2 .owl-carousel{
 	display: flex;

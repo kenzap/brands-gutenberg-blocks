@@ -29,7 +29,8 @@ function kenzap_brands_cgb_block_assets() { // phpcs:ignore
 	);
 
 	// Pass assets url variable to Gutenberg
-	wp_add_inline_script( 'wp-blocks', 'var kenzap_brands_assets = "' .plugins_url( 'dist/images/', dirname( __FILE__ ) ).'"', 'before');
+	$pathToPlugin = plugins_url( 'dist/images/', dirname( __FILE__ ) );
+	wp_add_inline_script( 'wp-blocks', 'var kenzap_brands_assets = "' .wp_parse_url($pathToPlugin)['path'].'"', 'before');
 
 	// Include owl carousel script
 	wp_enqueue_script( 
@@ -68,11 +69,16 @@ function kenzap_brands_cgb_editor_assets() { // phpcs:ignore
 	// Scripts.
 	wp_enqueue_script(
 		'kenzap-brands-editor', // Handle.
-		plugins_url( '/dist/blocks.build.js', dirname( __FILE__ ) ), // Block.build.js: We register the block here. Built with Webpack.
+		plugins_url( 'dist/blocks.build.js', dirname( __FILE__ ) ), // Block.build.js: We register the block here. Built with Webpack.
 		array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor', 'wp-compose' ), // Dependencies, defined above.
 		// filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.build.js' ), // Version: File modification time.
 		true // Enqueue the script in the footer.
 	);
+
+	// This is only available in WP5.
+	if ( function_exists( 'wp_set_script_translations' ) ) {
+		wp_set_script_translations( 'kenzap-brands-editor', 'kenzap-brands', KENZAP_BRANDS . '/languages/' );
+	}
 
 	// Styles.
 	wp_enqueue_style(
@@ -85,6 +91,3 @@ function kenzap_brands_cgb_editor_assets() { // phpcs:ignore
 
 // Hook: Editor assets.
 add_action( 'enqueue_block_editor_assets', 'kenzap_brands_cgb_editor_assets' );
-
-
-echo plugin_basename( __FILE__ );

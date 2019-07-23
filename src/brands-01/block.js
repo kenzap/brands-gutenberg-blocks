@@ -1,26 +1,18 @@
-/**
- * BLOCK: kenzap-brands 01
- *
- * Registering a basic block with Gutenberg.
- * Simple block, renders and saves the same content without any interactivity.
- */
-
-//  Import CSS.
 import './style.scss';
 import './editor.scss';
+
 import Edit from './edit';
 import Save from './save';
 import { blockProps } from '../commonComponents/container/container';
-
-const { __ } = wp.i18n; // Import __() from wp.i18n
-const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
+const { __ } = wp.i18n; 
+const { registerBlockType } = wp.blocks;
 
 /**
  * Provides the initial data for new block
  * @type {{title: string, icon: string, iconMediaId: string, iconMediaUrl: string, description: string}}
  */
 export const defaultItem = {
-    title: __( 'Kenzap brands blocks' ),
+    title: __( 'Kenzap brands blocks', 'kenzap-brands' ),
     iconMediaId: '',
     iconMediaUrl: window.kenzap_brands_assets + 'client-7.png',
     ilv: false,
@@ -29,18 +21,18 @@ export const defaultItem = {
 };
 
 export const defaultSubBlocks = JSON.stringify( [
-    { ...defaultItem, key: 'default1', iconMediaUrl: window.kenzap_brands_assets + 'client-1.png' },
-    { ...defaultItem, key: 'default2', iconMediaUrl: window.kenzap_brands_assets + 'client-2.png' },
-    { ...defaultItem, key: 'default3', iconMediaUrl: window.kenzap_brands_assets + 'client-3.png' },
-    { ...defaultItem, key: 'default3', iconMediaUrl: window.kenzap_brands_assets + 'client-4.png' },
-    { ...defaultItem, key: 'default3', iconMediaUrl: window.kenzap_brands_assets + 'client-5.png' },
-    { ...defaultItem, key: 'default3', iconMediaUrl: window.kenzap_brands_assets + 'client-6.png' },
-    { ...defaultItem, key: 'default3', iconMediaUrl: window.kenzap_brands_assets + 'client-7.png' },
-    { ...defaultItem, key: 'default3', iconMediaUrl: window.kenzap_brands_assets + 'client-8.png' },
-    { ...defaultItem, key: 'default3', iconMediaUrl: window.kenzap_brands_assets + 'client-9.png' },
-    { ...defaultItem, key: 'default3', iconMediaUrl: window.kenzap_brands_assets + 'client-10.png' },
-    { ...defaultItem, key: 'default3', iconMediaUrl: window.kenzap_brands_assets + 'client-11.png' },
-    { ...defaultItem, key: 'default3', iconMediaUrl: window.kenzap_brands_assets + 'client-12.png' },
+    { ...defaultItem, key: 'default1', 'link': '#', iconMediaUrl: window.kenzap_brands_assets + 'client-1.png' },
+    { ...defaultItem, key: 'default2', 'link': '#', iconMediaUrl: window.kenzap_brands_assets + 'client-2.png' },
+    { ...defaultItem, key: 'default3', 'link': '#', iconMediaUrl: window.kenzap_brands_assets + 'client-3.png' },
+    { ...defaultItem, key: 'default3', 'link': '#', iconMediaUrl: window.kenzap_brands_assets + 'client-4.png' },
+    { ...defaultItem, key: 'default3', 'link': '#', iconMediaUrl: window.kenzap_brands_assets + 'client-5.png' },
+    { ...defaultItem, key: 'default3', 'link': '#', iconMediaUrl: window.kenzap_brands_assets + 'client-6.png' },
+    { ...defaultItem, key: 'default3', 'link': '#', iconMediaUrl: window.kenzap_brands_assets + 'client-7.png' },
+    { ...defaultItem, key: 'default3', 'link': '#', iconMediaUrl: window.kenzap_brands_assets + 'client-8.png' },
+    { ...defaultItem, key: 'default3', 'link': '#', iconMediaUrl: window.kenzap_brands_assets + 'client-9.png' },
+    { ...defaultItem, key: 'default3', 'link': '#', iconMediaUrl: window.kenzap_brands_assets + 'client-10.png' },
+    { ...defaultItem, key: 'default3', 'link': '#', iconMediaUrl: window.kenzap_brands_assets + 'client-11.png' },
+    { ...defaultItem, key: 'default3', 'link': '#', iconMediaUrl: window.kenzap_brands_assets + 'client-12.png' },
 ] );
 
 /**
@@ -50,12 +42,7 @@ export const defaultSubBlocks = JSON.stringify( [
  */
 export const getStyles = attributes => {
     const vars = {
-        '--h3': `${ attributes.titleSize }px`,
-        '--h3v': `${ attributes.titleSize }`,
-        '--h3lh': `${ attributes.titleSize * 1.4 }px`,
-        '--p': `${ attributes.descriptionSize }px`,
-        '--pv': `${ attributes.descriptionSize }`,
-        '--plh': `${ attributes.descriptionSize * 1.4 }px`,
+
     };
 
     const kenzapContanerStyles = {
@@ -84,62 +71,35 @@ export const getStyles = attributes => {
  */
 registerBlockType( 'kenzap/brands-01', {
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'Kenzap Brands 1' ), // Block title.
+	title: __( 'Kenzap Brands 1', 'kenzap-brands' ), // Block title.
 	icon: 'shield', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'layout', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 	keywords: [
-		__( 'brands' ),
-		__( 'clients' ),
-		__( 'companies' ),
+		__( 'brands', 'kenzap-brands' ),
+		__( 'clients', 'kenzap-brands' ),
+		__( 'companies', 'kenzap-brands' ),
 	],
 	anchor: true,
     html: true,
+    supports: {
+        align: [ 'full', 'wide' ],
+    },
     attributes: {
 		...blockProps,
 
+        align: {
+            type: 'string',
+            default: "full",
+        },
+
         iconSize: {
             type: 'number',
-            default: 40,
+            default: 165,
         },
 
-        titleSize: {
+        iconSpace: {
             type: 'number',
-            default: 32,
-        },
-
-        titleColor: {
-            type: 'string',
-            default: '#111',
-        },
-
-        descriptionSize: {
-            type: 'number',
-            default: 11,
-        },
-
-        descriptionColor: {
-            type: 'string',
-            default: '#555',
-        },
-
-        isHoverEnabled: {
-            type: 'bool',
-            default: true,
-        },
-
-        backgroundColorOnHover: {
-            type: 'string',
-            default: '#1c1c1c',
-        },
-
-        titleColorOnHover: {
-            type: 'string',
-            default: '#fff',
-        },
-
-        descriptionColorOnHover: {
-            type: 'string',
-            default: '#fff',
+            default: 0,
         },
 
         items: {
@@ -172,7 +132,7 @@ registerBlockType( 'kenzap/brands-01', {
                 items: [ ...JSON.parse( defaultSubBlocks ) ],
                 isFirstLoad: false,
             } );
-            // TODO It is very bad solution to avoid low speed working of setAttributes function
+
             props.attributes.items = JSON.parse( defaultSubBlocks );
             if ( ! props.attributes.blockUniqId ) {
                 props.setAttributes( {
@@ -181,7 +141,6 @@ registerBlockType( 'kenzap/brands-01', {
             }
         }
         
-		// Creates a <p class='wp-block-cgb-block-kenzap-brands'></p>.
 		return ( <Edit { ...props } /> );
 	},
 

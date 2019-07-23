@@ -8,6 +8,11 @@
     "eject": "cgb-scripts eject"
   },
   "dependencies": {
-    "cgb-scripts": "1.13.0"
+    "@wordpress/i18n": "^3.5.0",
+    "cgb-scripts": "^1.18.1",
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "@wordpress/babel-plugin-makepot": "^2.1.3"
   }
 }

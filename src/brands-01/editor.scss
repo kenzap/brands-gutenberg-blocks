@@ -8,8 +8,8 @@
 
 
 
-.kenzap .link,
-.kenzap .remove {
+.kenzap .kenzap-clients-1 .link,
+.kenzap .kenzap-clients-1 .remove {
 	opacity: 0;
 	position: absolute;
 	top: 10px;
@@ -96,16 +96,16 @@
 	&:focus {
 	  outline: none;
 	}
-  }
+}
   
- .kenzap {
+.kenzap {
 	position: relative;
 	transition: all .2s;
-  }
+}
   
- .kenzap .editPadding {
+.kenzap .editPadding {
 	transition: all .2s;
-  }
+}
   
 .kenzap-clients-1.selected {
   

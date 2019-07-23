@@ -1,8 +1,7 @@
-const { __ } = wp.i18n; // Import __() from wp.i18n
+const { __ } = wp.i18n;
 const { Component } = wp.element;
-const { MediaUpload, RichText, InspectorControls, PanelColorSettings } = wp.editor;
-const { RangeControl, PanelBody, Popover, TextControl, ToggleControl } = wp.components;
-
+const { MediaUpload, InspectorControls } = wp.editor;
+const { RangeControl, Popover, TextControl, CheckboxControl, PanelBody, ToggleControl } = wp.components;
 import { defaultItem, getStyles } from './block';
 import { InspectorContainer, ContainerEdit } from '../commonComponents/container/container';
 
@@ -78,17 +77,7 @@ export default class Edit extends Component {
         }
         this.props.setAttributes( { items: items } );
     };
-
-    /**
-     * Set active sub block to edit icon
-     * @param {number} index from sub block array
-     */
-    setActiveSubBlock = ( index ) => {
-        if ( this.state.activeSubBlock !== index ) {
-            this.setState( { activeSubBlock: index } );
-        }
-    };
-
+    
     /**
      * Remove item
      * It also add default item if we remove all elements from array
@@ -145,6 +134,41 @@ export default class Edit extends Component {
         return (
             <div>
                 <InspectorControls>
+                    <PanelBody
+                            title={ __( 'General', 'kenzap-pricing' ) }
+                            initialOpen={ false }
+                        >
+                        <RangeControl
+                            label={ __( 'Image size', 'kenzap-pricing' ) }
+                            value={ attributes.iconSize }
+                            onChange={ ( iconSize ) => setAttributes( { iconSize } ) }
+                            min={ 50 }
+                            max={ 250 }
+                        />
+                
+                        <CheckboxControl
+                            label={ __( 'Carousel', 'kenzap-pricing' ) }
+                            checked={ attributes.carousel }
+                            onChange={ ( carousel ) => setAttributes( { carousel } ) }
+                        />
+
+                        { attributes.carousel && <RangeControl
+                            label={ __( 'Carousel size', 'kenzap-pricing' ) }
+                            value={ attributes.cSize }
+                            onChange={ ( cSize ) => setAttributes( { cSize } ) }
+                            min={ 1 }
+                            max={ 20 }
+                        /> }
+
+                        { !attributes.carousel &&  <RangeControl
+                            label={ __( 'Image spacing', 'kenzap-pricing' ) }
+                            value={ attributes.iconSpace }
+                            onChange={ ( iconSpace ) => setAttributes( { iconSpace } ) }
+                            min={ 0 }
+                            max={ 50 }
+                        /> }
+    
+                    </PanelBody>
                     <InspectorContainer
                         setAttributes={ setAttributes }
                         { ...attributes }
@@ -165,15 +189,15 @@ export default class Edit extends Component {
                         withPadding
                     >
                     <div className="kenzap-container kenzap-sm" style={ kenzapContanerStyles }>
-                        <ul className="owl-carousel">
+                        <ul className="owl-carousel-edit">
                             { attributes.items && attributes.items.map( ( item, index ) => (
                                 <li>
                                     <button className="remove" onClick={ () => this.removeItem( index ) }>
-                                        <span className="dashicons dashicons-no" />
+                                        <i className="dashicons dashicons-no" />
                                     </button>
                                     <a>
                                         <button className="link" onClick={ () => this.addLink( index ) }>
-                                            <span className="dashicons dashicons-admin-links" />
+                                            <i className="dashicons dashicons-admin-links" />
                                         </button>
                                         { item.ilv && (
                                             <Popover
@@ -219,7 +243,7 @@ export default class Edit extends Component {
                                                 this.onChangePropertyItem( 'title', media.title, index, true );
                                             } }
                                             value={ item.iconMediaId }
-                                            allowedTypes={ [ 'image', 'image/svg+xml' ] }
+                                            allowedTypes={ [ 'image', 'image/svg' ] }
                                             render={ ( props ) => (
                                                 <img
                                                     src={ ( item.iconMediaUrl != '' ) ? item.iconMediaUrl : item.iconMediaUrl }
@@ -227,6 +251,11 @@ export default class Edit extends Component {
                                                     style={ {
                                                         cursor: 'pointer',
                                                         position: 'relative',
+                                                        width: "auto",
+                                                        height: attributes.iconSize + 'px',
+                                                        'margin-left': attributes.iconSpace + 'px',
+                                                        'margin-right': attributes.iconSpace + 'px',
+                                                        //margin: "auto"
                                                     } }
                                                     onClick={ props.open }
                                                     role="presentation"
@@ -239,9 +268,7 @@ export default class Edit extends Component {
                         </ul>
                     </div>
                     <div className="editPadding"/> 
-                    <button 
-                        className="addWhite"
-                        onClick={ this.addItem }>
+                    <button className="addWhite" onClick={ this.addItem }>
                         <svg aria-hidden="true" role="img" focusable="false" class="dashicon dashicons-insert" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
                             <path d="M10 1c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9zm0 16c-3.9 0-7-3.1-7-7s3.1-7 7-7 7 3.1 7 7-3.1 7-7 7zm1-11H9v3H6v2h3v3h2v-3h3V9h-3V6z"></path>
                         </svg>

@@ -1,15 +1,20 @@
 const { __ } = wp.i18n; 
-const { RangeControl, CheckboxControl, SelectControl, RadioControl, PanelBody, Button } = wp.components;
+const { RangeControl, CheckboxControl, SelectControl, PanelBody, Button } = wp.components;
 const { Component, Fragment } = wp.element;
 const { MediaUpload, PanelColorSettings } = wp.editor;
 
 export const blockProps = {
     containerMaxWidth: {
-        type: 'number',
-        default: 1170,
+        type: 'string',
+        default: '2000',
     },
 
     containerPadding: {
+        type: 'number',
+        default: 0,
+    },
+
+    containerSidePadding: {
         type: 'number',
         default: 0,
     },
@@ -19,19 +24,43 @@ export const blockProps = {
         default: false,
     },
 
+    autoPadding: {
+        type: 'string',
+        default: '',
+    },
+
+    withAutoPadding: {
+        type: 'boolean',
+        default: false,
+    },
+
     width100: {
         type: 'boolean',
         default: false,
     },
 
+    parallax: {
+        type: 'boolean',
+        default: false,
+    },
+
+    optimize: {
+        type: 'boolean',
+        default: true,
+    },
+
     backgroundColor: {
         type: 'string',
-        default: '#ffffff',
     },
 
     backgroundImage: {
         type: 'string',
-        default: '',
+        default: 'none',
+    },
+
+    backgroundImageF: {
+        type: 'string',
+        default: 'none',
     },
 
     backgroundImageId: {
@@ -44,30 +73,61 @@ export const blockProps = {
         default: '',
     },
 
+    backgroundPosition: {
+        type: 'string',
+        default: 'center center',
+    },
+
     alignment: {
         type: 'string',
         default: '',
     },
+
+    nestedBlocks: {
+        type: 'string',
+        default: '',
+    },
+
+    uniqueID: {
+        type: 'string',
+    },
 };
+
+/**
+ * Removes domain name from the url
+ * @param {string} value - url
+ */
+//export const uo = ( url ) => { if(typeof(url)==='undefined') return ''; return url.replace(/^.*\/\/[^\/]+/, ''); };
+export const uo = ( url ) => { return url; };
 
 /**
  * Implements inspector container
  */
 export class InspectorContainer extends Component {
+
     render() {
+
         const {
             withBackground = true,
             backgroundImageId,
+            backgroundImage,
+            backgroundImageF,
             containerMaxWidth,
             backgroundColor,
             backgroundRepeat,
-            backgroundImage,
+            backgroundPosition,
             alignment,
             setAttributes,
             width100,
+            parallax,
+            optimize,
             withWidth100 = false,
             withPadding = false,
+            withNested = false,
             containerPadding,
+            containerSidePadding,
+            autoPadding = '',
+            nestedBlocks = '',
         } = this.props;
 
         return (
@@ -78,7 +138,7 @@ export class InspectorContainer extends Component {
                     initialOpen={ false }
                 >
                     <PanelColorSettings
-                        title={ __( 'Background Color' ) }
+                        title={ __( 'Color' ) }
                         initialOpen={ true }
                         colorSettings={ [
                                 {
@@ -91,19 +151,21 @@ export class InspectorContainer extends Component {
                             ] }
                     />
 
-                    <p style={ { marginBottom: '5px' } }>{ __( 'Background image' ) }</p>
+                    <p style={ { marginBottom: '5px' } }>{ __( 'Image' ) }</p>
                     <MediaUpload
                         onSelect={ ( media ) => {
+                                let url = media.sizes['kp_banner']?media.sizes['kp_banner']['url']:media.url;
                                 this.props.setAttributes( {
-                                    backgroundImage: media.url,
+                                    backgroundImage: url,
+                                    backgroundImageF: media.url,
                                     backgroundImageId: media.id,
                                 } );
                             } }
                         value={ backgroundImageId }
-                        allowedTypes={ [ 'image' ] }
+                        //allowedTypes={ [ 'image' ] }
                         render={ ( mediaUploadProps ) => (
                             <Fragment>
-                                { backgroundImageId ? (
+                                { ( backgroundImageId || backgroundImage !== 'none' ) ? (
                                     <Fragment>
                                         <Button
                                             isDefault
@@ -122,7 +184,7 @@ export class InspectorContainer extends Component {
                                                 height: '27px',
                                                 display: 'inline-block',
                                                 margin: '0 0 0 5px',
-                                                backgroundImage: `url(${ [ this.props.backgroundImage ? this.props.backgroundImage : '' ] })`,
+                                                backgroundImage: `url(${ [ this.props.backgroundImage ? (this.props.backgroundImage) : '' ] })`,
                                                 backgroundRepeat: 'no-repeat',
                                                 backgroundSize: 'cover',
                                             } }
@@ -139,23 +201,67 @@ export class InspectorContainer extends Component {
                         />
 
                     <p style={ { fontStyle: 'italic' } }>
-                        { __( 'Override background color with image. Transparent images may also apply.' ) }
+                        { __( 'Override background color with image.' ) }
                     </p>
 
+                    { backgroundImage !== 'none' && <Fragment>
                     <SelectControl
-                        label={ __( 'Background style' ) }
+                        label={ __( 'Style' ) }
                         value={ backgroundRepeat }
                         options={ [
                                 { label: __( 'default' ), value: 'default' },
                                 { label: __( 'contain' ), value: 'contain' },
                                 { label: __( 'cover' ), value: 'cover' },
-                                { label: __( 'repeated' ), value: 'repeated' },
+                                { label: __( 'repeated' ), value: 'repeat' },
                             ] }
                         onChange={ ( value ) => {
                                 setAttributes( { backgroundStyle: value } );
                             } }
-                        help={ __( 'Choose how to align background image' ) }
+                        help={ __( 'Background image alignment.' ) }
                         />
+
+                    <SelectControl
+                        label={ __( 'Position' ) }
+                        value={ backgroundPosition }
+                        options={ [
+                                { label: __( 'left top' ), value: 'left top' },
+                                { label: __( 'left center' ), value: 'left center' },
+                                { label: __( 'left bottom' ), value: 'left bottom' },
+                                { label: __( 'right top' ), value: 'right top' },
+                                { label: __( 'right center' ), value: 'right center' },
+                                { label: __( 'right bottom' ), value: 'right bottom' },
+                                { label: __( 'center top' ), value: 'center top' },
+                                { label: __( 'center center' ), value: 'center center' },
+                                { label: __( 'center bottom' ), value: 'center bottom' },
+                            ] }
+                        onChange={ ( value ) => {
+                                setAttributes( { backgroundPosition: value } );
+                            } }
+                        help={ __( 'Starting position of the background image.' ) }
+                        />
+
+                    <CheckboxControl
+                        label={ __( 'Parallax' ) }
+                        checked={ parallax }
+                        onChange={ ( parallax ) => {
+                            setAttributes( {
+                                parallax: parallax,
+                            } );
+                        } }
+                        help={ __( 'Background image behaviour during scroll.' ) }
+                    />
+                    
+                    <CheckboxControl
+                        label={ __( 'Optimize' ) }
+                        checked={ optimize }
+                        onChange={ ( optimize ) => {
+                            setAttributes( {
+                                optimize: optimize,
+                            } );
+                        } }
+                        help={ __( 'Optimize background image size for faster page loading.' ) }
+                    />
+                    </Fragment>}
                 </PanelBody>
                 }
 
@@ -163,25 +269,13 @@ export class InspectorContainer extends Component {
                     title={ __( 'Container' ) }
                     initialOpen={ false }
                 >
-                    <RadioControl
-                        label={ __( 'Alignment' ) }
-                        selected={ alignment }
-                        options={ [
-                            { label: 'Default', value: '' },
-                            { label: 'Full width', value: 'fullwidth' },
-                        ] }
-                        onChange={ ( value ) => {
-                            setAttributes( { alignment: value } );
-                        } }
-                        help={ __( 'Full Width may not work properly with all layout types including layouts with sidebars' ) }
-                    />
 
                     { ! width100 &&
                     <RangeControl
                         label={ __( 'Max width' ) }
-                        value={ containerMaxWidth }
-                        onChange={ ( value ) => setAttributes( { containerMaxWidth: value } ) }
-                        min={ 500 }
+                        value={ Number( containerMaxWidth ) }
+                        onChange={ ( value ) => setAttributes( { containerMaxWidth: `${ value }` } ) }
+                        min={ 300 }
                         max={ 2000 }
                         help={ __( 'Restrict layout width for content children.' ) }
                     />
@@ -189,28 +283,63 @@ export class InspectorContainer extends Component {
 
                     { withWidth100 &&
                     <CheckboxControl
-                        label={ __( 'No restriction' ) }
+                        label={ __( 'Full width' ) }
                         checked={ width100 }
                         onChange={ ( isChecked ) => {
                             setAttributes( {
                                 width100: isChecked,
-                                containerMaxWidth: isChecked ? '100%' : 1170,
+                                containerMaxWidth: isChecked ? '100%' : '2000',
                             } );
                         } }
-                        help={ __( 'No restriction layout width for content children.' ) }
+                        help={ __( 'Ignore max width restriction.' ) }
                     />
                     }
 
                     { withPadding &&
-                    <RangeControl
-                        label={ __( 'Top and bottom paddings' ) }
-                        value={ containerPadding }
-                        onChange={ ( value ) => setAttributes( { containerPadding: value } ) }
-                        min={ 0 }
-                        max={ 200 }
-                        help={ __( 'Useful when you want to extend background image vertical size or create more space.' ) }
+                        <Fragment>
+                            <RangeControl
+                                label={ __( 'Top and bottom paddings' ) }
+                                value={ containerPadding }
+                                onChange={ ( value ) => setAttributes( { containerPadding: value } ) }
+                                min={ 0 }
+                                max={ 200 }
+                            />
 
-                    />
+                            <RangeControl
+                                label={ __( 'Left and right paddings' ) }
+                                value={ containerSidePadding }
+                                onChange={ ( value ) => setAttributes( { containerSidePadding: value } ) }
+                                min={ 0 }
+                                max={ 50 }
+                            />
+
+                            <CheckboxControl
+                                label={ __( 'Responsive paddings' ) }
+                                checked={ autoPadding.length > 0 }
+                                onChange={ ( isChecked ) => {
+                                    setAttributes( {
+                                        autoPadding: isChecked ? 'autoPadding' : '',
+                                    } );
+                                } }
+                                help={ __( 'Auto calculate top and bottom paddings.' ) }
+                            />
+                        </Fragment>
+                    }
+
+                    { withNested &&
+                    <SelectControl
+                        label={ __( 'Nested block' ) }
+                        value={ nestedBlocks }
+                        options={ [
+                                { label: __( 'hidden' ), value: '' },
+                                { label: __( 'top' ), value: 'top' },
+                                { label: __( 'bottom' ), value: 'bottom' },
+                            ] }
+                        onChange={ ( value ) => {
+                                setAttributes( { nestedBlocks: value } );
+                            } }
+                            help={ __( 'Embed other blocks inside this container. Nested blocks inherit parent block styling settings. Add custom headings, spacings or paragraphs.' ) }
+                        />
                     }
                 </PanelBody>
             </Fragment>
@@ -228,10 +357,11 @@ export const ContainerEdit = ( props ) => {
     const styles = {};
 
     if ( props.withBackground ) {
-        if ( props.attributes.backgroundImage ) {
-            styles.backgroundImage = `url(${ [ props.attributes.backgroundImage ] })`;
+        if ( props.attributes.backgroundImage ) { 
+            if(props.attributes.optimize){ styles.backgroundImage = props.attributes.backgroundImage !== 'none' ? `url(${ (props.attributes.backgroundImage) })` : 'none';}else{styles.backgroundImage = props.attributes.backgroundImageF !== 'none' ? `url(${ (props.attributes.backgroundImageF) })` : 'none'; }
             styles.backgroundRepeat = props.attributes.backgroundRepeat;
             styles.backgroundSize = props.attributes.backgroundSize;
+            styles.backgroundPosition = props.attributes.backgroundPosition;
         }
 
         if ( props.attributes.backgroundColor ) {
@@ -239,8 +369,12 @@ export const ContainerEdit = ( props ) => {
         }
     }
 
-    if ( props.withPadding ) {
-        styles.padding = `${ props.attributes.containerPadding }px 0`;
+    if ( props.withPadding && ! props.attributes.autoPadding ) {
+        styles.padding = `${ props.attributes.containerPadding }px 0px`;
+    }
+
+    if ( props.attributes.parallax ) {
+        styles.backgroundAttachment = 'fixed';
     }
 
     switch ( props.attributes.backgroundStyle ) {
@@ -262,15 +396,29 @@ export const ContainerEdit = ( props ) => {
             break;
         }
 
-        case 'repeated': {
-            styles.backgroundRepeat = 'repeated';
+        case 'repeat': {
+            styles.backgroundRepeat = 'repeat';
             styles.backgroundSize = 'auto';
         }
     }
 
+    let additionalClassForKenzapContainer = 'kenzap-lg';
+    if (props.attributes.containerMaxWidth < 992 ) {
+        additionalClassForKenzapContainer = 'kenzap-md';
+    }
+    if ( props.attributes.containerMaxWidth < 768 ) {
+        additionalClassForKenzapContainer = 'kenzap-sm';
+    }
+    if ( props.attributes.containerMaxWidth < 480 ) {
+        additionalClassForKenzapContainer = 'kenzap-xs';
+    }
+    if ( props.attributes.width100 ) {
+        additionalClassForKenzapContainer = 'kenzap-lg';
+    }
+
     return (
         <div
-            className={ `${ props.className } ${ props.attributes.alignment }` }
+            className={ `${ props.className } ${additionalClassForKenzapContainer} ${ props.attributes.alignment } ${ props.attributes.autoPadding }` }
             style={ { ...styles, ...props.style } }
         >
             { props.children }
@@ -289,9 +437,10 @@ export const ContainerSave = ( props ) => {
 
     if ( props.withBackground ) {
         if ( props.attributes.backgroundImage ) {
-            styles.backgroundImage = `url(${ [ props.attributes.backgroundImage ] })`;
+            if(props.attributes.optimize){ styles.backgroundImage = props.attributes.backgroundImage !== 'none' ? `url(${ (props.attributes.backgroundImage) })` : 'none'; }else{ styles.backgroundImage = props.attributes.backgroundImageF !== 'none' ? `url(${ (props.attributes.backgroundImageF) })` : 'none'; }
             styles.backgroundRepeat = props.attributes.backgroundRepeat;
             styles.backgroundSize = props.attributes.backgroundSize;
+            styles.backgroundPosition = props.attributes.backgroundPosition;
         }
 
         if ( props.attributes.backgroundColor ) {
@@ -299,8 +448,12 @@ export const ContainerSave = ( props ) => {
         }
     }
 
-    if ( props.withPadding ) {
-        styles.padding = `${ props.attributes.containerPadding }px 0`;
+    if ( props.withPadding && ! props.attributes.autoPadding ) {
+        styles.padding = `${ props.attributes.containerPadding }px 0px`;
+    }
+
+    if ( props.attributes.parallax ) {
+        styles.backgroundAttachment = 'fixed';
     }
 
     switch ( props.attributes.backgroundStyle ) {
@@ -322,15 +475,29 @@ export const ContainerSave = ( props ) => {
             break;
         }
 
-        case 'repeated': {
-            styles.backgroundRepeat = 'repeated';
+        case 'repeat': {
+            styles.backgroundRepeat = 'repeat';
             styles.backgroundSize = 'auto';
         }
     }
 
+    let additionalClassForKenzapContainer = 'kenzap-lg';
+    if (props.attributes.containerMaxWidth < 992 ) {
+        additionalClassForKenzapContainer = 'kenzap-md';
+    }
+    if ( props.attributes.containerMaxWidth < 768 ) {
+        additionalClassForKenzapContainer = 'kenzap-sm';
+    }
+    if ( props.attributes.containerMaxWidth < 480 ) {
+        additionalClassForKenzapContainer = 'kenzap-xs';
+    }
+    if ( props.attributes.width100 ) {
+        additionalClassForKenzapContainer = 'kenzap-lg';
+    }
+
     return (
         <div
-            className={ `${ props.className } ${ props.attributes.alignment }` }
+            className={ `${ props.className } ${additionalClassForKenzapContainer} ${ props.attributes.alignment } ${ props.attributes.autoPadding }` }
             style={ { ...styles, ...props.style } }
         >
             { props.children }

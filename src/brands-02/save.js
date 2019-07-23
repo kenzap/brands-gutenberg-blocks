@@ -1,8 +1,7 @@
-const { __ } = wp.i18n; // Import __() from wp.i18n
+const { __ } = wp.i18n;
 const { Component } = wp.element;
-
 import { defaultItem, getStyles } from './block';
-import { blockProps, ContainerSave } from '../commonComponents/container/container';
+import { ContainerSave } from '../commonComponents/container/container';
 
 /**
  * Keys for new blocks
@@ -19,9 +18,6 @@ let key = 0;
  * @returns {Node} rendered component
  */
 export default class Edit extends Component {
-    state = {
-        activeSubBlock: -1,
-    };
 
     /**
      * Add a new item to list with default fields
@@ -55,16 +51,6 @@ export default class Edit extends Component {
         }
         items[ index ][ property ] = value;
         this.props.setAttributes( { items: items } );
-    };
-
-    /**
-     * Set active sub block to edit icon
-     * @param {number} index from sub block array
-     */
-    setActiveSubBlock = ( index ) => {
-        if ( this.state.activeSubBlock !== index ) {
-            this.setState( { activeSubBlock: index } );
-        }
     };
 
     /**
@@ -117,19 +103,29 @@ export default class Edit extends Component {
                         className={ `kenzap-container ${ this.mediaQueries( attributes.containerMaxWidth ) } `}
                         style={ kenzapContanerStyles }
                         >
-                        <ul className="owl-carousel">
+                        <ul className="owl-carousel owl-load cload"
+                            data-images={ attributes.cSize }
+                            data-carousel={ attributes.carousel }
+                            >
                             { attributes.items && attributes.items.map( ( item, index ) => (
                                 <li>
                                     <a 
                                         href={ item.link ? item.link : 'javascript:;' }
                                         target={ item.linknew ? '_blank':'_self' }
+                                        rel="noopener noreferrer"
                                     >
                                         <img
                                             src={ ( item.iconMediaUrl != '' ) ? item.iconMediaUrl : item.iconMediaUrl }
                                             alt={ item.title.replace( /<(?:.|\n)*?>/gm, '' ) }
+                                            className="brandimg"
                                             style={ {
                                                 cursor: 'pointer',
                                                 position: 'relative',
+                                                height: attributes.iconSize + 'px',
+                                                'margin-left': attributes.iconSpace + 'px!important',
+                                                'margin-right': attributes.iconSpace + 'px!important',
+                                                width: "auto",
+                                                margin: "auto"
                                             } }
                                             role="presentation"
                                         />

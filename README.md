@@ -1,26 +1,3 @@
-# Brands Gutenberg Blocks
-
-Create beautiful brands section on your website. 
-To be used with WordPress Gutenberg.
-
-
-![Create beatiful brands section with Gutenberg](https://kenzap.com/website/img/brands-2.png)
-
-<b>Block is easy customizable:</b>
-
-<ul>
-<li>Increase Steps Size</li>
-<li>Change steps, font, hover colors</li>
-<li>Adjust font size</li>
-<li>Adjust owl carousel</li>
-<li>Create multiple rows</li>
-<li>Increase offset between blocks</li>
-<li>Set background color or image</li>
-<li>Wide and narrow layout support</li>
-</ul>
-
-# How to build the block
-
 This project was bootstrapped with [Create Guten Block](https://github.com/ahmadawais/create-guten-block).
 
 Below you will find some information on how to run scripts.

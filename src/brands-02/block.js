@@ -1,19 +1,11 @@
-/**
- * BLOCK: kenzap-brands
- *
- * Registering a basic block with Gutenberg.
- * Simple block, renders and saves the same content without any interactivity.
- */
-
-//  Import CSS.
 import './style.scss';
 import './editor.scss';
 import Edit from './edit';
 import Save from './save';
 import { blockProps } from '../commonComponents/container/container';
 
-const { __ } = wp.i18n; // Import __() from wp.i18n
-const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
+const { __ } = wp.i18n; 
+const { registerBlockType } = wp.blocks; 
 
 /**
  * Provides the initial data for new block
@@ -56,12 +48,6 @@ export const defaultSubBlocks = JSON.stringify( [
  */
 export const getStyles = attributes => {
     const vars = {
-        '--h3': `${ attributes.titleSize }px`,
-        '--h3v': `${ attributes.titleSize }`,
-        '--h3lh': `${ attributes.titleSize * 1.4 }px`,
-        '--p': `${ attributes.descriptionSize }px`,
-        '--pv': `${ attributes.descriptionSize }`,
-        '--plh': `${ attributes.descriptionSize * 1.4 }px`,
     };
 
     const kenzapContanerStyles = {
@@ -100,52 +86,35 @@ registerBlockType( 'kenzap/brands-02', {
 	],
 	anchor: true,
     html: true,
+    supports: {
+        align: [ 'full', 'wide' ],
+    },
     attributes: {
-		...blockProps,
+        ...blockProps,
+        
+        align: {
+            type: 'string',
+            default: 'full',
+        },
 
         iconSize: {
             type: 'number',
-            default: 40,
+            default: 130,
         },
 
-        titleSize: {
-            type: 'number',
-            default: 32,
-        },
-
-        titleColor: {
-            type: 'string',
-            default: '#111',
-        },
-
-        descriptionSize: {
-            type: 'number',
-            default: 11,
-        },
-
-        descriptionColor: {
-            type: 'string',
-            default: '#555',
-        },
-
-        isHoverEnabled: {
-            type: 'bool',
+        carousel: {
+            type: 'boolean',
             default: true,
         },
 
-        backgroundColorOnHover: {
-            type: 'string',
-            default: '#1c1c1c',
+        iconSpace: {
+            type: 'number',
+            default: 0,
         },
 
-        titleColorOnHover: {
-            type: 'string',
-            default: '#fff',
-        },
-
-        descriptionColorOnHover: {
-            type: 'string',
-            default: '#fff',
+        cSize: {
+            type: 'number',
+            default: 10,
         },
 
         items: {
@@ -178,7 +147,7 @@ registerBlockType( 'kenzap/brands-02', {
                 items: [ ...JSON.parse( defaultSubBlocks ) ],
                 isFirstLoad: false,
             } );
-            // TODO It is very bad solution to avoid low speed working of setAttributes function
+       
             props.attributes.items = JSON.parse( defaultSubBlocks );
             if ( ! props.attributes.blockUniqId ) {
                 props.setAttributes( {
@@ -187,7 +156,6 @@ registerBlockType( 'kenzap/brands-02', {
             }
         }
         
-		// Creates a <p class='wp-block-cgb-block-kenzap-brands'></p>.
 		return ( <Edit { ...props } /> );
 	},
 

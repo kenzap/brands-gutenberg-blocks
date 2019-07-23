@@ -1,0 +1,39 @@
+# Copyright (C) 2018 Kenzap
+# This file is distributed under the same license as the Kenzap Brands plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Kenzap Brands 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/kenzap-brands\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2018-12-22T16:22:59+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.1.0\n"
+"X-Domain: kenzap-brands\n"
+
+#. Plugin Name of the plugin
+msgid "Kenzap Brands"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://github.com/kenzap/kenzap-brands-gutenberg-blocks/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Easily create and customize brand, client blocks on your website"
+msgstr "Hadyl create and customize brand, client blocks on your website"
+
+#. Author of the plugin
+msgid "Kenzap"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://kenzap.com"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "Kenzap Brands 1"
+msgstr "Kenzap Brands 5"
