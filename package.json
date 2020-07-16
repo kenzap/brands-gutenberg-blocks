@@ -10,7 +10,7 @@
   "dependencies": {
     "@wordpress/i18n": "^3.5.0",
     "cgb-scripts": "^1.18.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mem": "^5.1.1"
   },
   "devDependencies": {
