@@ -4,7 +4,7 @@ Create beautiful step section on your website.
 To be used with WordPress Gutenberg.
 
 
-![Create beatiful brands section with Gutenberg](https://kenzap.com/website/img/brands-2.png)
+![Create beatiful brands section with Gutenberg](https://cdn.kenzap.com/github/img/brands-2.png)
 
 <b>Block is easy customizable:</b>
 
